@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 const app = express()
@@ -31,10 +31,25 @@ const client = new MongoClient(uri, {
 const run =async()=> {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+    await client.connect();
 
     const toyDatabase = client.db("toysDB").collection('toys')
 
+    // get all data from database
+    app.get('/products', async(req, res)=>{
+      const cursor =  toyDatabase.find()
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+    // get only the data added by me 
+    app.get('/myAddedToys', async(req, res)=>{
+      const result = await toyDatabase.find().toArray()
+      res.send(result)
+    })
+
+
+    // add product by a form in the database
     app.post('/addProduct', async (req, res)=>{
         const newProduct = req.body
         console.log(newProduct);
@@ -42,6 +57,14 @@ const run =async()=> {
         res.send(result)
     })
 
+
+    // delete the products
+    app.delete('/products/:id', async(req,res)=>{
+      const id = req.params.id
+      const query = {_id: new ObjectId(id)}
+      const result = await toyDatabase.deleteOne(query)
+      res.send(result)
+    })
 
 
 
