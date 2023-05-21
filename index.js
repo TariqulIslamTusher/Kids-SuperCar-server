@@ -7,7 +7,15 @@ const app = express()
 const port = process.env.PORT || 4000
 
 // middleware
+
+// const corsConfig = {
+//   origin: '',
+//   credentials: true,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+// }
 app.use(cors())
+// app.use(cors(corsConfig))
+// PushSubscriptionOptions("", cors(corsConfig))
 app.use(express.json())
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hskwi4h.mongodb.net/?retryWrites=true&w=majority`;
@@ -26,7 +34,7 @@ const client = new MongoClient(uri, {
 const run = async () => {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const toyDatabase = client.db("toysDB").collection('toys')
 
     // get all data from database
@@ -48,13 +56,6 @@ const run = async () => {
       res.send(result)
     })
 
-    // add product by a form in the database
-    app.post('/addProduct', async (req, res) => {
-      const newProduct = req.body
-      const result = await toyDatabase.insertOne(newProduct);
-      res.send(result)
-    })
-
 
     // get item by specific id
     app.get('/products/:id', async (req, res) => {
@@ -63,6 +64,15 @@ const run = async () => {
       const result = await toyDatabase.findOne(query)
       res.send(result)
     })
+
+
+    // add product by a form in the database
+    app.post('/addProduct', async (req, res) => {
+      const newProduct = req.body
+      const result = await toyDatabase.insertOne(newProduct);
+      res.send(result)
+    })
+
 
     // delete the products
     app.delete('/products/:id', async (req, res) => {
@@ -85,9 +95,10 @@ const run = async () => {
           description: updatedProducts.description
         }
       }
+
       console.log(updatedProducts);
 
-      const result =await toyDatabase.updateMany(filter, updateDoc)
+      const result = await toyDatabase.updateMany(filter, updateDoc)
       res.send(result)
 
     })
@@ -121,3 +132,4 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`server is running on port : ${port}`);
 })
+// module.exports = app;
