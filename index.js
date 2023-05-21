@@ -143,7 +143,7 @@ const run = async () => {
       const query = { category : category }
       const options = {
 
-        projection: { category: 1, toyName: 1, sellerName: 1, price: 1,rating:1 , availableQty:1 },
+        projection: { category: 1, toyName: 1, sellerName: 1, price: 1,rating:1 , availableQty:1 , photoURL: 1 },
       };
       const cursor = toyDatabase.find(query, options)
       const result = await cursor.toArray()
