@@ -69,20 +69,13 @@ const run = async () => {
       res.send(result)
     })
 
-
-    /**********************************/
-    // get item by specific id
+    // get item by specific id for single view details card
     app.get('/products/:id', async (req, res) => {
       const id = req.params.id 
-      console.log(id)
       const query = {_id: new ObjectId(id)}
       const user = await toyDatabase.findOne(query)
       res.send(user)
     })
-
-
-
-
 
 
 
@@ -104,6 +97,7 @@ const run = async () => {
 
     app.get('/addedProductsDeccend', async (req, res) => {
       let query = {}
+      console.log(req.query.email);
       if (req.query?.email) {
         query = { sellerEmail: req.query.email }
       }
@@ -127,13 +121,27 @@ const run = async () => {
 
 
 
-    // get all data from database by sorting methode By name
-    app.get('/products/:name', async (req, res) => {
-      const name = req.params.name 
+    // get all data from database by searching methode By name for searching
+    app.get('/productsByName', async (req, res) => {
+      const name = req.query.toyName
       const query = {toyName: name}
       const options = {
         projection: {toyName : 1 },
       };
+      const cursor = toyDatabase.find(query, options)
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+// *******************************************
+    // get all the data under category match by the category the tab wants
+    app.get('/products', async (req, res)=>{
+      const category = req.query.category
+      console.log(category);
+      const query = {}
+      const options = {
+        projection: {category : 1}
+      }
       const cursor = toyDatabase.find(query, options)
       const result = await cursor.toArray()
       res.send(result)
