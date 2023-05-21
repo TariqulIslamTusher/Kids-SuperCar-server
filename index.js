@@ -44,10 +44,91 @@ const run = async () => {
       res.send(result)
     })
 
+    // get all data from database by sorting methode Accendingly
+    app.get('/accendProducts', async (req, res) => {
+      const query = {}
+      const cursor = toyDatabase.find(query).sort({price: 1})
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+    // get all data from database by sorting methode Deccendingly
+    app.get('/deccendProducts', async (req, res) => {
+      const query = {}
+      const cursor = toyDatabase.find(query).sort({price: -1})
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+    // get all data from database by sorting methode By name
+    app.get('/nameProducts', async (req, res) => {
+      const query = {}
+      const cursor = toyDatabase.find(query).sort({toyName: 1})
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+
+
+
+
+
+
+
+    // get all the from data base only for user in accending order
+
+    app.get('/addedProductsAccend', async (req, res) => {
+      let query = {}
+      if (req.query?.email) {
+        query = { sellerEmail: req.query.email }
+      }
+      const cursor = toyDatabase.find(query).sort({price: 1})
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+    // get all the from data base only for user in deccending order
+
+    app.get('/addedProductsDeccend', async (req, res) => {
+      let query = {}
+      if (req.query?.email) {
+        query = { sellerEmail: req.query.email }
+      }
+      const cursor = toyDatabase.find(query).sort({price: -1})
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+    // get all the from data base only for user in by name order
+
+    app.get('/addedProductsName', async (req, res) => {
+      let query = {}
+      if (req.query?.email) {
+        query = { sellerEmail: req.query.email }
+      }
+      const cursor = toyDatabase.find(query).sort({toyName: 1})
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
+
+
+
+    // get all data from database by sorting methode By name
+    app.get('/products/:name', async (req, res) => {
+      const name = req.params.name 
+      const query = {toyName: name}
+      const options = {
+        projection: {toyName : 1 },
+      };
+      const cursor = toyDatabase.find(query, options)
+      const result = await cursor.toArray()
+      res.send(result)
+    })
+
 
     //get data by query from the req
     app.get('/addedProducts', async (req, res) => {
-      console.log(req.query);
       let query = {}
       if (req.query?.email) {
         query = { sellerEmail: req.query.email }
