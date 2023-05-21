@@ -8,13 +8,13 @@ const port = process.env.PORT || 4000
 
 // middleware
 
-// const corsConfig = {
-//   origin: '',
-//   credentials: true,
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
-// }
-app.use(cors())
-// app.use(cors(corsConfig))
+const corsConfig = {
+  origin: '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH']
+}
+// app.use(cors())
+app.use(cors(corsConfig))
 // PushSubscriptionOptions("", cors(corsConfig))
 app.use(express.json())
 
@@ -39,6 +39,7 @@ const run = async () => {
 
     // get all data from database
     app.get('/products', async (req, res) => {
+      
       const cursor = toyDatabase.find()
       const result = await cursor.toArray()
       res.send(result)
@@ -67,6 +68,18 @@ const run = async () => {
       const result = await cursor.toArray()
       res.send(result)
     })
+
+
+    /**********************************/
+    // get item by specific id
+    app.get('/products/:id', async (req, res) => {
+      const id = req.params.id 
+      console.log(id)
+      const query = {_id: new ObjectId(id)}
+      const user = await toyDatabase.findOne(query)
+      res.send(user)
+    })
+
 
 
 
@@ -137,14 +150,6 @@ const run = async () => {
       res.send(result)
     })
 
-
-    // get item by specific id
-    app.get('/products/:id', async (req, res) => {
-      const id = req.params.id
-      const query = { _id: new ObjectId(id) }
-      const result = await toyDatabase.findOne(query)
-      res.send(result)
-    })
 
 
     // add product by a form in the database

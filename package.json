@@ -1,12 +1,12 @@
 {
   "name": "toy-marketplace-server",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -14,5 +14,15 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongodb": "^5.5.0"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/programming-hero-web-course-4/b7a11-toy-marketplace-server-side-TariqulIslamTusher.git"
+  },
+  "bugs": {
+    "url": "https://github.com/programming-hero-web-course-4/b7a11-toy-marketplace-server-side-TariqulIslamTusher/issues"
+  },
+  "homepage": "https://github.com/programming-hero-web-course-4/b7a11-toy-marketplace-server-side-TariqulIslamTusher#readme",
+  "description": ""
 }
