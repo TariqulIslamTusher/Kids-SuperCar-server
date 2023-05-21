@@ -39,7 +39,7 @@ const run = async () => {
 
     // get all data from database
     app.get('/products', async (req, res) => {
-      
+
       const cursor = toyDatabase.find()
       const result = await cursor.toArray()
       res.send(result)
@@ -48,7 +48,7 @@ const run = async () => {
     // get all data from database by sorting methode Accendingly
     app.get('/accendProducts', async (req, res) => {
       const query = {}
-      const cursor = toyDatabase.find(query).sort({price: 1})
+      const cursor = toyDatabase.find(query).sort({ price: 1 })
       const result = await cursor.toArray()
       res.send(result)
     })
@@ -56,7 +56,7 @@ const run = async () => {
     // get all data from database by sorting methode Deccendingly
     app.get('/deccendProducts', async (req, res) => {
       const query = {}
-      const cursor = toyDatabase.find(query).sort({price: -1})
+      const cursor = toyDatabase.find(query).sort({ price: -1 })
       const result = await cursor.toArray()
       res.send(result)
     })
@@ -64,15 +64,15 @@ const run = async () => {
     // get all data from database by sorting methode By name
     app.get('/nameProducts', async (req, res) => {
       const query = {}
-      const cursor = toyDatabase.find(query).sort({toyName: 1})
+      const cursor = toyDatabase.find(query).sort({ toyName: 1 })
       const result = await cursor.toArray()
       res.send(result)
     })
 
     // get item by specific id for single view details card
     app.get('/products/:id', async (req, res) => {
-      const id = req.params.id 
-      const query = {_id: new ObjectId(id)}
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
       const user = await toyDatabase.findOne(query)
       res.send(user)
     })
@@ -88,7 +88,7 @@ const run = async () => {
       if (req.query?.email) {
         query = { sellerEmail: req.query.email }
       }
-      const cursor = toyDatabase.find(query).sort({price: 1})
+      const cursor = toyDatabase.find(query).sort({ price: 1 })
       const result = await cursor.toArray()
       res.send(result)
     })
@@ -101,7 +101,7 @@ const run = async () => {
       if (req.query?.email) {
         query = { sellerEmail: req.query.email }
       }
-      const cursor = toyDatabase.find(query).sort({price: -1})
+      const cursor = toyDatabase.find(query).sort({ price: -1 })
       const result = await cursor.toArray()
       res.send(result)
     })
@@ -113,7 +113,7 @@ const run = async () => {
       if (req.query?.email) {
         query = { sellerEmail: req.query.email }
       }
-      const cursor = toyDatabase.find(query).sort({toyName: 1})
+      const cursor = toyDatabase.find(query).sort({ toyName: 1 })
       const result = await cursor.toArray()
       res.send(result)
     })
@@ -124,24 +124,27 @@ const run = async () => {
     // get all data from database by searching methode By name for searching
     app.get('/productsByName', async (req, res) => {
       const name = req.query.toyName
-      const query = {toyName: name}
+      const query = { toyName: name }
       const options = {
-        projection: {toyName : 1 },
+        projection: { toyName: 1 },
       };
       const cursor = toyDatabase.find(query, options)
       const result = await cursor.toArray()
       res.send(result)
     })
 
-// *******************************************
+
+
+    // *******************************************
     // get all the data under category match by the category the tab wants
-    app.get('/products', async (req, res)=>{
+    app.get('/category', async (req, res) => {
       const category = req.query.category
-      console.log(category);
-      const query = {}
+      console.log(category)
+      const query = { category : category }
       const options = {
-        projection: {category : 1}
-      }
+
+        projection: { category: 1 },
+      };
       const cursor = toyDatabase.find(query, options)
       const result = await cursor.toArray()
       res.send(result)
@@ -168,7 +171,7 @@ const run = async () => {
     })
 
 
-    // delete the products
+    //************** */ delete the products
     app.delete('/products/:id', async (req, res) => {
       const id = req.params.id
       const query = { _id: new ObjectId(id) }
@@ -177,7 +180,7 @@ const run = async () => {
     })
 
 
-    //  Update items by using PUT or Patch for a single ID
+    // ************** Update items by using PUT or Patch for a single ID
     app.patch('/products/:id', async (req, res) => {
       const id = req.params.id
       const filter = { _id: new ObjectId(id) }
