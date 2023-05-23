@@ -78,45 +78,69 @@ const run = async () => {
     })
 
 
-
+    // ************************************************
+    // Standard Procedure of sorting data, data is sorted as ascending, descending and by name
+    
+    app.get('/dayna', async (req, res) => {
+      console.log(req.query);
+      let query = {}
+      const sort = req.query.sort
+      console.log(sort);
+      if (req.query?.email) {
+        query = { sellerEmail: req.query.email }
+      }
+      let options = {}
+      if (sort === 'name') {
+         options = {
+          sort: { "toyName": 1 }
+        }
+      } else {
+         options = {
+          sort: { "price": sort === 'lowPrice' ? 1 : -1 }
+        }
+      }
+      const cursor = toyDatabase.find(query, options)
+      const result = await cursor.toArray()
+      res.send(result)
+    })
 
 
     // get all the from data base only for user in accending order
 
-    app.get('/addedProductsAccend', async (req, res) => {
-      let query = {}
-      if (req.query?.email) {
-        query = { sellerEmail: req.query.email }
-      }
-      const cursor = toyDatabase.find(query).sort({ price: 1 })
-      const result = await cursor.toArray()
-      res.send(result)
-    })
+    // app.get('/addedProductsAccend', async (req, res) => {
+    //   let query = {}
+    //   if (req.query?.email) {
+    //     query = { sellerEmail: req.query.email }
+    //   }
+    //   const cursor = toyDatabase.find(query).sort({ price: 1 })
+    //   const result = await cursor.toArray()
+    //   res.send(result)
+    // })
 
-    // get all the from data base only for user in deccending order
+    // // get all the from data base only for user in deccending order
 
-    app.get('/addedProductsDeccend', async (req, res) => {
-      let query = {}
-      console.log(req.query.email);
-      if (req.query?.email) {
-        query = { sellerEmail: req.query.email }
-      }
-      const cursor = toyDatabase.find(query).sort({ price: -1 })
-      const result = await cursor.toArray()
-      res.send(result)
-    })
+    // app.get('/addedProductsDeccend', async (req, res) => {
+    //   let query = {}
+    //   console.log(req.query.email);
+    //   if (req.query?.email) {
+    //     query = { sellerEmail: req.query.email }
+    //   }
+    //   const cursor = toyDatabase.find(query).sort({ price: -1 })
+    //   const result = await cursor.toArray()
+    //   res.send(result)
+    // })
 
-    // get all the from data base only for user in by name order
+    // // get all the from data base only for user in by name order
 
-    app.get('/addedProductsName', async (req, res) => {
-      let query = {}
-      if (req.query?.email) {
-        query = { sellerEmail: req.query.email }
-      }
-      const cursor = toyDatabase.find(query).sort({ toyName: 1 })
-      const result = await cursor.toArray()
-      res.send(result)
-    })
+    // app.get('/addedProductsName', async (req, res) => {
+    //   let query = {}
+    //   if (req.query?.email) {
+    //     query = { sellerEmail: req.query.email }
+    //   }
+    //   const cursor = toyDatabase.find(query).sort({ toyName: 1 })
+    //   const result = await cursor.toArray()
+    //   res.send(result)
+    // })
 
 
 
@@ -140,10 +164,9 @@ const run = async () => {
     app.get('/category', async (req, res) => {
       const category = req.query.category
       console.log(category)
-      const query = { category : category }
+      const query = { category: category }
       const options = {
-
-        projection: { category: 1, toyName: 1, sellerName: 1, price: 1,rating:1 , availableQty:1 , photoURL: 1, description: 1 },
+        projection: { category: 1, toyName: 1, sellerName: 1, price: 1, rating: 1, availableQty: 1, photoURL: 1, description: 1 }
       };
       const cursor = toyDatabase.find(query, options)
       const result = await cursor.toArray()
