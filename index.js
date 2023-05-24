@@ -38,36 +38,91 @@ const run = async () => {
     const toyDatabase = client.db("toysDB").collection('toys')
 
     // get all data from database
+    // ************************************************
+    // Standard Procedure of sorting data, data is sorted as ascending, descending and by name
+
     app.get('/products', async (req, res) => {
 
-      const cursor = toyDatabase.find()
+      let query = {}
+      let options = {}
+
+      const sort = req.query.sort
+      const search = req.query.search
+      console.log(req.query);
+
+      if (req.query?.email && req.query?.search) {
+        query = {
+          sellerEmail: req.query.email, toyName: {
+            $regex: search,
+            $options: 'i'
+          }
+        }
+      } else if (req.query?.email) {
+        query = { sellerEmail: req.query.email }
+      } else if (req.query?.search) {
+        query = {
+          toyName: {
+            $regex: search,
+            $options: 'i'
+          }
+        }
+      } else {
+        query = {}
+      }
+
+      if (sort === 'name') {
+        options = {
+          sort: { "toyName": 1 }
+        }
+      } else {
+        options = {
+          sort: { "price": sort === 'lowPrice' ? 1 : -1 }
+        }
+      }
+      // $regex formate *************
+      // {
+      //   "first_name": {
+      //      "$regex": "Harriet",
+      //      "$options": "i"
+      //   }
+
+      // if (req.query?.search) {
+      //   query = { toyName : {
+      //     $regex : search,
+      //     $options: 'i'
+      //   }}
+      // }
+      const cursor = toyDatabase.find(query, options)
       const result = await cursor.toArray()
       res.send(result)
     })
 
-    // get all data from database by sorting methode Accendingly
-    app.get('/accendProducts', async (req, res) => {
-      const query = {}
-      const cursor = toyDatabase.find(query).sort({ price: 1 })
-      const result = await cursor.toArray()
-      res.send(result)
-    })
 
-    // get all data from database by sorting methode Deccendingly
-    app.get('/deccendProducts', async (req, res) => {
-      const query = {}
-      const cursor = toyDatabase.find(query).sort({ price: -1 })
-      const result = await cursor.toArray()
-      res.send(result)
-    })
 
-    // get all data from database by sorting methode By name
-    app.get('/nameProducts', async (req, res) => {
-      const query = {}
-      const cursor = toyDatabase.find(query).sort({ toyName: 1 })
-      const result = await cursor.toArray()
-      res.send(result)
-    })
+    // get all data from database by sorting methode Accendingly But this system is not a standard one ********************** 
+
+    // app.get('/accendProducts', async (req, res) => {
+    //   const query = {}
+    //   const cursor = toyDatabase.find(query).sort({ price: 1 })
+    //   const result = await cursor.toArray()
+    //   res.send(result)
+    // })
+
+    // // get all data from database by sorting methode Deccendingly
+    // app.get('/deccendProducts', async (req, res) => {
+    //   const query = {}
+    //   const cursor = toyDatabase.find(query).sort({ price: -1 })
+    //   const result = await cursor.toArray()
+    //   res.send(result)
+    // })
+
+    // // get all data from database by sorting methode By name
+    // app.get('/nameProducts', async (req, res) => {
+    //   const query = {}
+    //   const cursor = toyDatabase.find(query).sort({ toyName: 1 })
+    //   const result = await cursor.toArray()
+    //   res.send(result)
+    // })
 
     // get item by specific id for single view details card
     app.get('/products/:id', async (req, res) => {
@@ -78,31 +133,6 @@ const run = async () => {
     })
 
 
-    // ************************************************
-    // Standard Procedure of sorting data, data is sorted as ascending, descending and by name
-    
-    app.get('/dayna', async (req, res) => {
-      console.log(req.query);
-      let query = {}
-      const sort = req.query.sort
-      console.log(sort);
-      if (req.query?.email) {
-        query = { sellerEmail: req.query.email }
-      }
-      let options = {}
-      if (sort === 'name') {
-         options = {
-          sort: { "toyName": 1 }
-        }
-      } else {
-         options = {
-          sort: { "price": sort === 'lowPrice' ? 1 : -1 }
-        }
-      }
-      const cursor = toyDatabase.find(query, options)
-      const result = await cursor.toArray()
-      res.send(result)
-    })
 
 
     // get all the from data base only for user in accending order
@@ -145,17 +175,20 @@ const run = async () => {
 
 
 
+    // ***************searching ************************
     // get all data from database by searching methode By name for searching
-    app.get('/productsByName', async (req, res) => {
-      const name = req.query.toyName
-      const query = { toyName: name }
-      const options = {
-        projection: { toyName: 1 },
-      };
-      const cursor = toyDatabase.find(query, options)
-      const result = await cursor.toArray()
-      res.send(result)
-    })
+    // this methodes isnot a standard procedure
+
+    // app.get('/productsByName', async (req, res) => {
+    //   const name = req.query.toyName
+    //   const query = { toyName: name }
+    //   const options = {
+    //     projection: { toyName: 1 },
+    //   };
+    //   const cursor = toyDatabase.find(query, options)
+    //   const result = await cursor.toArray()
+    //   res.send(result)
+    // })
 
 
 
@@ -174,15 +207,15 @@ const run = async () => {
     })
 
 
-    //get data by query from the req
-    app.get('/addedProducts', async (req, res) => {
-      let query = {}
-      if (req.query?.email) {
-        query = { sellerEmail: req.query.email }
-      }
-      const result = await toyDatabase.find(query).toArray()
-      res.send(result)
-    })
+    // //get data by query from the req
+    // app.get('/addedProducts', async (req, res) => {
+    //   let query = {}
+    //   if (req.query?.email) {
+    //     query = { sellerEmail: req.query.email }
+    //   }
+    //   const result = await toyDatabase.find(query).toArray()
+    //   res.send(result)
+    // })
 
 
 
