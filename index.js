@@ -6,8 +6,8 @@ require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 4000
 
-// middleware
 
+// middleware
 const corsConfig = {
   origin: '*',
   credentials: true,
@@ -79,7 +79,7 @@ const run = async () => {
           sort: { "price": sort === 'lowPrice' ? 1 : -1 }
         }
       }
-      // $regex formate *************
+      // $regex formate **********
       // {
       //   "first_name": {
       //      "$regex": "Harriet",
@@ -192,7 +192,7 @@ const run = async () => {
 
 
 
-    // *******************************************
+    // ****************************************
     // get all the data under category match by the category the tab wants
     app.get('/category', async (req, res) => {
       const category = req.query.category
